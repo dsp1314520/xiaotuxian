@@ -13,11 +13,13 @@ import { ref, onMounted } from 'vue'
 import { getBannerAPI } from '@/apis/home'
 const pagination = { clickable: true }
 const bannerList = ref([])
+// 获取轮播图数据
 const getBanner = async () => {
   const res = await getBannerAPI()
   console.log(res)
   bannerList.value = res.result
 }
+// 调用轮播图数据
 onMounted(() => getBanner())
 </script>
 
