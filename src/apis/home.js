@@ -10,3 +10,7 @@ export const findNewAPI = () => {
     method:'GET'
   })
 }
+
+export const getHotAPI = () => {
+  return  http('home/hot', {})
+}

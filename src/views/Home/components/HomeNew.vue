@@ -3,12 +3,12 @@ import HomePanel from "./HomePanel.vue";
 import { findNewAPI } from '@/apis/home'
 import { ref } from 'vue'
 const newList = ref([])
-const getHotList = async () => {
+const getNewList = async () => {
   const res = await findNewAPI()
-  console.log(res);
+  // console.log(res);
   newList.value = res.result
 }
-getHotList()
+getNewList()
 
 
 </script>
