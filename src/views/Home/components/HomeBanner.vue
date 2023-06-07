@@ -20,6 +20,7 @@ const getBanner = async () => {
   bannerList.value = res.result
 }
 // 调用轮播图数据
+
 onMounted(() => getBanner())
 </script>
 
@@ -27,8 +28,8 @@ onMounted(() => getBanner())
 
 <template>
   <div class="home-banner">
-    <swiper class="mySwiper" style="height: 500px;" :modules="modules"
-      :autoplay="{ delay: 3000, disableOnInteraction: false }" :pagination="pagination">
+    <swiper class="mySwiper" style="height: 500px;" :modules="modules" :slides-per-view="1" :loop="true"
+      :autoplay="{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true }" :pagination="pagination">
       <swiper-slide v-for="item in bannerList" :key="item.id">
         <img :src="item.imgUrl" alt="">
       </swiper-slide>
