@@ -1,18 +1,33 @@
 <script setup>
 import { getTopCategoryAPI } from '@/apis/category'
+import { getBannerAPI } from '@/apis/home'
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import GoodsItem from "@/components/GoodsItem.vue";
 const categoryData = ref({})
 const route = useRoute()
 const getCategory = async (id) => {
   const res = await getTopCategoryAPI(id)
   categoryData.value = res.result
 }
+// 获取导航导航
 getCategory(route.params.id)
+// 获取banner
+const bannerList = ref([])
+const getBanner = async () => {
+  const res = await getBannerAPI({
+    distributionSite: '2'
+  })
+  bannerList.value = res.result
+}
+getBanner()
 watch(route, () => {
   // console.log(132123);
   getCategory(route.params.id)
+  getBanner()
 }, { deep: true })
+
+
 </script>
 
 <template>
@@ -24,6 +39,34 @@ watch(route, () => {
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
         </el-breadcrumb>
+      </div>
+      <!-- 轮播图 -->
+      <div class="home-banner">
+        <el-carousel height="500px">
+          <el-carousel-item v-for="item in bannerList" :key="item.id">
+            <img v-img-lazy="item.imgUrl" alt="">
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <!-- 分类数据模板 -->
+      <div class="sub-list">
+        <h3>全部分类</h3>
+        <ul>
+          <li v-for="i in categoryData.children" :key="i.id">
+            <RouterLink to="/">
+              <img :src="i.picture" />
+              <p>{{ i.name }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+        <div class="head">
+          <h3>- {{ item.name }}-</h3>
+        </div>
+        <div class="body">
+          <GoodsItem v-for="good in item.goods" :good="good" :key="good.id" />
+        </div>
       </div>
     </div>
   </div>
@@ -106,6 +149,17 @@ watch(route, () => {
 
   .bread-container {
     padding: 25px 0;
+  }
+}
+
+.home-banner {
+  width: 1240px;
+  height: 500px;
+
+
+  img {
+    width: 100%;
+    height: 500px;
   }
 }
 </style>
